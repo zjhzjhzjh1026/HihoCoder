@@ -1,0 +1,49 @@
+/*********************************************************************************
+  *FileName:  Manacher
+  *Author:  WILL
+  *Version: 1.0
+  *Date:  2016.2.29
+  *Function: Maximum Palindrome Substring
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1032
+**********************************************************************************/
+
+#include<iostream>
+#include<cstring>
+#include<vector>
+using namespace std;
+
+int main()
+{
+        int m;
+        cin>>m;
+        while (m--) 
+        {       
+          string str;
+          cin>>str;
+          string str_resize; 
+          int i,j,k;   
+          int len=str.size();
+          str_resize.resize(2*len+2);
+          str_resize[0]='@';   //防止溢出 
+          str_resize[1]='#';   //奇偶归奇 
+          for(k=0;k<len;k++)
+          {
+            str_resize[(k+1)*2]=str[k];       
+            str_resize[(k+1)*2+1]='#';       //在原串中间插入特殊字符 
+          } 
+          vector<int> p(str_resize.size(),0);
+          int res=0;
+          int id=0;
+          for(k=1;k<str_resize.size();k++)              //Manacher算法！！！！！IMPORTANT！！！！ 
+          {          
+            if(p[id]+id>k) p[k]=min(p[id*2-k],p[id]+id-k);
+            else p[k]=1;
+            while(str_resize[k+p[k]]==str_resize[k-p[k]]) p[k]++;
+            if(k+p[k]>id+p[id]) id=k;
+            res=max(res,p[k]);
+          } 
+          cout<<res-1<<endl;
+        } 
+    
+    return 0;       
+}
