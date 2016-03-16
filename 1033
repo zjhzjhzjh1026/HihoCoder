@@ -1,0 +1,87 @@
+/*********************************************************************************
+  *FileName:  Digit DP
+  *Author:  WILL
+  *Version: 1.0
+  *Date:  2016.2.29
+  *Function: alternating sum
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1033
+**********************************************************************************/
+
+#include<iostream>
+#include<cstring>
+using namespace std;
+#define ll long long int
+#define rep(a,b,c) for(int a=b;a<c;a++)   
+                                             //算法在数字前都加了一个0，避免第一次直接循环最高位 
+const int mod = 1000000007;
+struct node{
+       ll n,s;
+};
+node dp[21][20][400];
+int bits[21];
+ll base[21];
+
+node dfs(int len, int dig, bool begin_zero, bool end_flag, int sum)
+{
+  node t;
+  t.n=0;
+  t.s=0;
+  if(len<=0||len>=20||dig<0||dig>9||sum<-200||sum>=200)   //越界，直接返回 
+   return t;
+  if(!end_flag&&dp[len][dig+(begin_zero?0:10)][sum+200].n!=-1)  //记忆型算法，如果dp.n不为-1则代表已有值，直接调用 
+   return dp[len][dig+(begin_zero?0:10)][sum+200];
+  if(len==1)    //当只有1位时直接判断结果 
+  {
+     if(dig!=sum) 
+      return t;
+     t.n=1; t.s=sum;
+      return t;
+  }
+  
+  //开始枚举第i-1位的数字 
+  int end=end_flag?bits[len-2]:9;
+  int newsum = dig-sum;   //求开始变号后下个需要的dig值 
+  node temp;
+  rep(j,0,end+1)
+  {
+      if(begin_zero)    //如果首位已经不是0，那么则代表开始使用+-交错规则，则使用newsum递归 ，那么此位便不会再进入0规则，begin_0恒true 
+         temp = dfs(len-1,j,true,end_flag&&(j==end),newsum);
+      else             //首位是0时，还没开始交错，故使用sum作为参数  j==end时代表循环到了最高位，end_flag变为true 
+         temp = dfs(len-1,j,j!=0,end_flag&&(j==end),sum);
+      t.n+=temp.n;     //将对第i-1位枚举的结果并入t中 
+      t.s=((t.s + temp.s)%mod + ((temp.n * dig )%mod * base[len-1])%mod)%mod;   //i-1位的sum加上第i位有temp个符合条件乘以该位的值乘以该位的量级 
+     // t.s=((temp.s+t.s)%mod+(((temp.n*dig)%mod)*base[len-1]%mod)%mod)%mod;       
+  } 
+  if(!end_flag) dp[len][dig+(begin_zero?0:10)][sum+200]=t;  //如果end_flag为false，既不是最高位，可以枚举0-9的情况，则可以计入总值 
+  return t;
+}
+
+ll solve(ll n, int s)
+{  
+   if (n<=0) return 0;
+   int l=0;
+   rep(i,0,21) bits[i]=0;
+   while(n)                           //得到数字长度l以及将每位存在bits数组中 
+   {
+     bits[l++]=n%10;
+     n=n/10;
+   }
+   return dfs(l+1,0,false,true,s).s;
+}
+
+int main(void)
+{
+    ll l,r,s;
+    node t;
+    t.n=-1;
+    t.s=0;
+    rep(i,0,21)  rep(j,0,20) rep(k,0,400) dp[i][j][k]=t;   //初始化dp数组 
+    base[0]=1;
+    rep(i,1,21) base[i]=(10*base[i-1])%mod;     //初始化base，，即不同位数对应乘阶 
+    ll t1,t2;
+    cin>>l>>r>>s;
+    t1=solve(r,s);
+    t2=solve(l-1,s);
+    cout<<(t1-t2+mod)%mod<<endl;     
+    return 0;
+}
