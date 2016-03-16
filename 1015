@@ -1,0 +1,51 @@
+/*********************************************************************************
+  *FileName:  KMP
+  *Author:  WILL
+  *Version: 1.0
+  *Date:  2016.2.28
+  *Function: String Pattern Matching
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1015
+**********************************************************************************/
+
+#include<iostream>
+#include<string>
+#include<cstring>
+using namespace std;
+
+int main(void)
+{
+    int m;
+    cin>>m;
+    for(int k=0;k<m;k++)
+    {
+      string str,str_m;
+      cin>>str_m;
+      cin>>str;
+      int len_m=strlen(str_m.c_str()); 
+      int len=strlen(str.c_str()); 
+      int i=0;
+      int j=-1;
+      int next[10010]={-1};
+      while(i<len_m)    //计算next数组 
+      {
+        if(j==-1||str_m[i]==str_m[j]) next[++i]=++j;
+        else j=next[j];
+      }
+       /* for(int s=0; s<len_m+1; s++)
+        cout<<next[s]<< endl; //显示算出的next数组 */
+     
+      i=j=0;
+      int ans=0;
+      while(i<len)       //使用next数组计算结果 
+      {
+          if(j==-1||str[i]==str_m[j]) 
+          {
+              ++i;++j;
+          }
+          else j=next[j];
+          if(j==len_m) ans++;
+      } 
+      cout<<ans<<endl; 
+    }
+ return 0;
+}
