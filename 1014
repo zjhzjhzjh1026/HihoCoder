@@ -1,0 +1,104 @@
+/*********************************************************************************
+  *FileName:  Trie Tree
+  *Author:  WILL
+  *Version: 1.0
+  *Date:  2016.2.27
+  *Function: Trie Tree for words search
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1014
+**********************************************************************************/
+
+#include<iostream>
+using namespace std;
+typedef struct Node{
+       char c;
+       int count;
+       Node* down;
+       Node* left; 
+       }TNode;
+int main(void)
+{
+    int n;
+    cin>>n;
+    string word; 
+    TNode* TriTree=new TNode;
+    TNode* Cur; 
+    TNode* Addn;
+    TNode* Temp;
+    TriTree->count=n;
+    TriTree->left=NULL;
+    TriTree->down=NULL;
+    
+    for(int i=0;i<n;i++){
+       cin>>word;
+       Cur=TriTree;
+       for(string::iterator it=word.begin();it!=word.end();++it){
+         Addn=Cur->down;
+         if(Addn==NULL){
+           Temp = new TNode;
+           Temp->c=*it;
+           Temp->count=1;
+           Temp->down=NULL;
+           Temp->left=NULL;
+           Cur->down=Temp;
+           Cur=Cur->down;          
+         }
+         else{
+           while(Addn->left!=NULL){
+             if (Addn->c==*it){
+               (Addn->count)++;
+               Cur=Addn;
+               break; 
+             } 
+             Addn=Addn->left;
+           } 
+          if (Addn->left==NULL)
+           {  if (Addn->c==*it){
+               (Addn->count)++;
+               Cur=Addn;            
+             } 
+              else
+              { Temp = new TNode;
+                Temp->c=*it;
+                Temp->count=1;
+                Temp->left=NULL;
+                Temp->down=NULL; 
+                Addn->left=Temp;
+                Cur=Addn->left;
+              }
+           }
+         } 
+       }
+    } 
+    
+    int m;
+    cin>>m;
+    int countResult;
+    string testword;
+    for(int k=0;k<m;k++)
+    { Cur=TriTree;
+      cin>>testword;
+      for(string::iterator it=testword.begin();it!=testword.end();++it)
+      {  Addn=Cur->down;
+         if(Addn==NULL)
+         {  countResult=0;
+            break;
+         }  
+         else
+         { while(Addn!=NULL)
+           {  if(Addn->c==*it)
+              {   countResult=Addn->count;
+                  Cur=Addn;
+                  break;
+              } 
+              Addn=Addn->left;
+           } 
+           if(Addn==NULL)
+           { countResult=0;
+             break;
+           }
+         }  
+      }   
+      cout<<countResult<<endl;   
+    }
+
+}
