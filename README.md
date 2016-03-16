@@ -1,2 +1,2 @@
 # HihoCoder
-This is a test file
+All Source codes are compiled by C++.
