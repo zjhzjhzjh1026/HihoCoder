@@ -1,0 +1,67 @@
+/*********************************************************************************
+  *FileName:  Trie Tree
+  *Author:  WILL
+  *Version: 1.0
+  *Date:  2016.2.27
+  *Function: Trie Tree for words search
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1014
+  空间换时间，同时减少了代码量
+**********************************************************************************/
+
+#include<cstdio>  
+#include<cstdlib>  
+#include<iostream>  
+#include<cstring>  
+#include<cmath>  
+#define L 10+1    //字符串长度 
+using namespace std;
+
+struct T{
+  int num;
+  T* next[26];
+  T(){                  //构造函数 
+        num=0;
+        int i;
+        for(i=0;i<26;i++)
+        {
+           next[i]=NULL;
+        }
+      }       
+}t;
+
+void In(char str[]){
+    T* p=&t;
+    for (int i=0;str[i];i++){
+      int a=str[i]-'a';
+      if(p->next[a]==NULL)       //搜索下一个节点是否为空 
+       p->next[a]=new T;       
+       p=p->next[a];       //指针前进 
+       p->num++;           //遍历计数+1 
+    }          
+}
+  
+int Test(char str[]){
+    T* p= &t;
+    int res;
+    for (int i=0;str[i];i++){
+       int a=str[i]-'a';
+       if(p->next[a]==NULL) 
+       { res=0;
+         break;
+       }
+       p=p->next[a];
+       res=p->num;
+    }
+    return res;
+}
+
+int main(){
+   int n,m;
+   char str[L];
+   for(scanf("%d",&n);n--;)       //建立Trie字典的单词数目 
+   scanf("%s",str),In(str);       //分别输入每个单词，构造Trie树 
+   for(scanf("%d",&m);m--;)       //检测单词数目                  
+   scanf("%s",str),printf("%d\n",Test(str));      //对每个单词在Trie树中进行搜索，输出结果 
+   return 0;
+}
+
