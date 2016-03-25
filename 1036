@@ -1,0 +1,113 @@
+/*********************************************************************************
+  *FileName:Trie  Graph
+  *Author:  WILL
+  *Version: 1.0
+  *Date:  2016.2.29
+  *Function: Search Pattern in a Trie Graph
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1036
+**********************************************************************************/
+
+#include<cstdio>  
+#include<cstdlib>  
+#include<iostream>  
+#include<cstring>  
+#include<cmath> 
+#include<queue>
+#define L 10+1    //字符串长度 
+#define M 1000001  //测试字典长度 
+using namespace std;
+
+struct T{
+ // int num;
+  T* next[26];
+  bool End;       //单词结尾标记 
+  T* prev;        //后缀节点 
+  T(){                  //构造函数 
+       // num=0;
+        int i;
+        prev=NULL;
+        End=false;
+        for(i=0;i<26;i++)
+        {
+           next[i]=NULL;
+        }
+      }       
+}t;
+
+void In(char str[]){             //构造Trie树 
+    T* p=&t;
+    for (int i=0;str[i];i++){
+      int a=str[i]-'a';
+      if(p->next[a]==NULL)       //搜索下一个节点是否为空 
+       p->next[a]=new T;       
+       p=p->next[a];             //指针前进 
+  //     p->num++;                //遍历计数+1 
+    } 
+    p->End=true;               //标记单词结尾 
+}
+
+void buildTrie(){                 //补全后缀节点 
+     T* p=&t;   
+     queue<T*> Q;              //Q队列用于深度优先求后缀节点 
+     for(int i=0;i<26;i++){      //先得到根节点和第一层节点的后缀节点 
+       if(p->next[i]){
+          p->next[i]->prev=&t;
+          Q.push(p->next[i]);
+       }
+     }  
+     while(!Q.empty()){
+        p=Q.front();
+        T* proot=p->prev;
+        Q.pop();
+        for(int i=0;i<26;i++){
+           if(p->next[i]&&!(p->next[i]->End)){    //树的末端不用再搜 
+             while(proot){
+               if(proot->next[i]) {
+                p->next[i]->prev=proot->next[i];   //后缀节点是否有【i】这条路径 
+                if(proot->next[i]->End)            //后缀节点为单词结尾，则标记本节点也为单词结尾 
+                  p->next[i]->End=true;
+                break;             
+               }
+               else proot=proot->prev;           //没有【i】路径，则取后缀节点的后缀节点 
+             }
+             if(proot==NULL)                     //退到了根节点，则该节点的后缀节点为根节点 
+              p->next[i]->prev=&t;            
+            Q.push(p->next[i]);                  //将这个节点放入队列，等待进一步深度优先搜寻 
+           }
+        }        
+     }
+}
+  
+bool Test(char str[]){               //将建好的Trie图与字典进行匹配 
+    T* p= &t;
+    for (int i=0;str[i];i++){      
+       int a=str[i]-'a';
+       while(true){
+       if(p->next[a]){ 
+         p=p->next[a];
+         if(p->End==true)    //此时为单词结尾，，表明搜索到，返回Yes 
+           return true;
+         break;
+       } 
+       else p=p->prev;       //此时没有匹配的树枝，在后缀节点中继续搜索 
+       if(p==&t||!p){        //如果“后缀”到根节点中了，则跳出while，，从字典中下一个字符重新开始 
+          p=&t;
+          break;
+       }     
+    }
+  } 
+  return false;
+}
+
+int main(){
+   int n;
+   char str[L],str_m[M];
+   for(scanf("%d",&n);n--;)       //建立Trie字典的单词数目 
+   scanf("%s",str),In(str);       //分别输入每个单词，构造Trie树 
+   buildTrie();              //补全前缀节点 
+   scanf("%s",str_m);      //对每个单词在Trie树中进行搜索，输出结果 
+   bool ans=Test(str_m);
+   cout<<(ans?"YES":"NO")<<endl;   //注意输出全为大写 
+   cin>>n;  //c++显示辅助 
+   return 0;
+}
