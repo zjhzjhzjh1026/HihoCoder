@@ -1,0 +1,45 @@
+/*********************************************************************************
+  *FileName:Number Triangle
+  *Author: WILL
+  *Version: 1.0
+  *Date:  2016.3.26
+  *Function: Dynamic Planning
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1037
+  *Explain：The code provides 2 ways to get the best[][] array, the way commented out is to compute the array form the above to the bottom,
+  while the other way has the inverse order. The latter one has better performance in the time span and the memory span, which is obviously
+  by analyzing the algorithm.
+**********************************************************************************/
+
+#include<iostream>
+#include<algorithm>
+#define N 100
+using namespace std;
+
+int main(){    //状态转移方程方法 
+  int n;
+  cin>>n;
+  int rewards[N][N]={0};
+  for(int i=0;i<n;i++)
+   for(int j=0;j<=i;j++)
+    cin>>rewards[i][j];
+ /* int best[N][N]={0};
+  best[0][0]=rewards[0][0];
+  for(int i=1;i<n;i++)         //由第一层往最后一层计算，【Hihocoder Test】M=8MB，T=37ms 
+   for(int j=0;j<=i;j++){
+     if(j==0) best[i][j]=best[i-1][j]+rewards[i][j];
+     else if(j==i) best[i][j]=best[i-1][j-1]+rewards[i][j];
+     else best[i][j]=max(best[i-1][j-1],best[i-1][j])+rewards[i][j];
+   }
+   int ans=0;
+   for(int i=0;i<n;i++)
+     ans=(best[n-1][i]>ans)?best[n-1][i]:ans; 
+   cout<<ans;
+   */
+   for(int i=n-1;i>0;i--)    //从最后一层往上算，不用单独讨论j=0和j=i-1的两种情况，【Hihocoder Test】M=4MB，T=25ms 
+   for(int j=0;j<=i;j++){
+     rewards[i-1][j]+=max(rewards[i][j],rewards[i][j+1]);   //状态转移方程 
+   }
+
+   cout<<rewards[0][0];
+   cin>>n;//显示 
+} 
