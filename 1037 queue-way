@@ -1,0 +1,54 @@
+/*********************************************************************************
+  *FileName:Number Triangle
+  *Author: WILL
+  *Version: 1.0
+  *Date:  2016.3.26
+  *Function: introduce Queue to do Dynamic Planning
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1037
+  *Explain：Using the queue to search width-firstly
+**********************************************************************************/
+#include<iostream>
+#include<algorithm>
+#include<queue>  
+#define N 1005
+using namespace std;          //引入队列的宽度优先搜索算法，未优化 
+
+struct state{
+  int i,j,k;
+}t;
+
+int main(){
+  int n;
+  cin>>n;
+  int rewards[N][N]={0};
+  for(int i=0;i<n;i++)              //输入每个门的彩票数 
+   for(int j=0;j<=i;j++)
+    cin>>rewards[i][j];
+  int ans=0;
+  state* p=&t;
+  state* temp=NULL;
+  p->i=p->j=0;
+  p->k=rewards[0][0];            //把<0,0,rewards[0][0]>放入队列中 
+  queue<state*> Q;
+  Q.push(p);
+  while(!Q.empty()){
+    p=Q.front();
+    Q.pop();
+    if(p->i==n-1)               //搜索到最后一列，得到最大输出 
+      ans=(p->k>ans)?p->k:ans;
+    else {                    //否则每次将<i+1,j,rewards[i+1][j]> 和<i+1,j+1,rewards[i+1][j+1]放入队列 
+         temp=new state;
+         temp->i=(p->i)+1;
+         temp->j=p->j;
+         temp->k=p->k+rewards[temp->i][temp->j];
+         Q.push(temp);
+         temp=new state;
+         temp->i=(p->i)+1;
+         temp->j=(p->j)+1;
+         temp->k=p->k+rewards[temp->i][temp->j];
+         Q.push(temp);
+    }
+  }
+  cout<<ans;
+  cin>>n;   //输出显示 
+}
