@@ -1,0 +1,36 @@
+/*******************************************************************************
+  *FileName:0-1 Knapsack problem
+  *Author:  WILL
+  *Version: 1.0
+  *Date:  2016.3.27
+  *Function: dynamic planning to solve 0-1 Knapsack problem
+  *Others: SOURCE: http://hihocoder.com/problemset/problem/1038
+**********************************************************************************/
+  
+#include<iostream>
+#include<math.h>
+using namespace std;
+#define N 505
+#define M 100005
+
+int main(){                 // 【HihoCoder Test 700ms 200mb】 
+  int n,m;
+  int best[N][M];
+  cin>>n>>m;
+  int need[N],value[N]; 
+  for(int i=1;i<=n;i++){           //输入数据 
+    cin>>need[i]>>value[i];
+  }   
+  for(int j=0;j<=m;j++) 
+    best[0][j]=0;
+  for(int i=1;i<=n;i++)
+   for(int j=0;j<=m;j++){
+     if(j<need[i]) best[i][j]=best[i-1][j];
+     else best[i][j]=max(best[i-1][j],best[i-1][j-need[i]]+value[i]);   //状态转移方程 
+   } 
+   cout<<best[n][m];
+   int t;   //输出显示 
+   cin>>t;  
+} 
+
+  
