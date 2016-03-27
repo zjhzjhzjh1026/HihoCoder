@@ -1,0 +1,42 @@
+/*******************************************************************************
+  *FileName:0-1 Knapsack problem
+  *Author:  WILL
+  *Version: 2.0
+  *Date:  2016.3.27
+  *Function: dynamic planning to solve 0-1 Knapsack problem
+  *Others: SOURCE: http://hihocoder.com/problemset/problem/1038
+  *Optimization Stategy：when using state transition equation, we only involve the
+   (i-1)th-dimensional data, so 2-dimensional array is needed. 
+**********************************************************************************/
+#include<iostream>
+#include<math.h>
+using namespace std;
+#define N 505
+#define M 100005
+
+int main(){                 //【HihoCoder Test 400ms 1MB】 
+  int n,m;
+  int best[2][M];           //横向维度只需2    
+  cin>>n>>m;
+  int need[N],value[N];       //注意在减小数组大小的时候不要直接减少N，免得导致need和value数组越界！！！ 
+  for(int i=1;i<=n;i++){      //输入数据 
+    cin>>need[i]>>value[i];
+  }   
+  for(int j=0;j<=m;j++) 
+    best[0][j]=0;
+  int i; 
+  for(i=1;i<=n;i++)
+   for(int j=0;j<=m;j++){
+     if(i%2==1){
+        if(j<need[i]) best[1][j]=best[0][j];
+         else best[1][j]=max(best[0][j],best[0][j-need[i]]+value[i]);
+     }  
+      else{
+        if(j<need[i]) best[0][j]=best[1][j];
+         else best[0][j]=max(best[1][j],best[1][j-need[i]]+value[i]);
+     }
+   } 
+   cout<<best[(i+1)%2][m];
+   int t;   //输出显示 
+   cin>>t;  
+} 
