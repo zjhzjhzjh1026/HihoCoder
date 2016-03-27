@@ -1,0 +1,35 @@
+/*******************************************************************************
+  *FileName:0-1 Knapsack problem
+  *Author:  WILL
+  *Version: 3.0
+  *Date:  2016.3.27
+  *Function: dynamic planning to solve 0-1 Knapsack problem
+  *Others: SOURCE: http://hihocoder.com/problemset/problem/1038
+  *Optimization Stategy：when using state transition equation, we only involve the
+   data less than j in the upper layer,so we can just compute the datas in vector. 
+**********************************************************************************/
+#include<iostream>
+#include<math.h>
+using namespace std;
+#define N 505
+#define M 100005
+
+int main(){                 //【HihoCoder Test 192ms 0MB】 
+  int n,m;
+  int best[M];           //横向维度只需2    
+  cin>>n>>m;
+  int need[N],value[N];       
+  for(int i=1;i<=n;i++){      //输入数据 
+    cin>>need[i]>>value[i];
+  }   
+  for(int j=0;j<=m;j++) 
+    best[j]=0;
+    
+  for(int i=1;i<=n;i++)
+   for(int j=m;j>=need[i];j--){   //从m向下遍历，把j<need(i)的条件放进循环了 
+     best[j]=max(best[j-need[i]]+value[i],best[j]); 
+   } 
+   cout<<best[m];
+   int t;   //输出显示 
+   cin>>t;  
+} 
