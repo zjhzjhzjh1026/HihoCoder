@@ -33,3 +33,4 @@ int main(){                 //【HihoCoder Test 192ms 0MB】
    int t;   //输出显示 
    cin>>t;  
 } 
+ 
