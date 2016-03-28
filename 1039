@@ -1,0 +1,56 @@
+/*********************************************************************************
+  *FileName:Character elimination
+  *Author: Javan
+  *Version: 1.0
+  *Date:  2016.3.28
+  *Function: Character elimination
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1039
+  *Explain：for every gap in the original string, insert the A,B,C respectively and
+   do elimination to see whether this strategy can achieve better result.
+**********************************************************************************/
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+
+string Sub(string& str){
+  vector<char> t;
+  int len=str.size();
+  if(len<=1)   //必须有！不然会导致A点越界 
+    return str;
+  for(int i=0;i<len-1;i++){
+    if(str[i]==str[i+1]){
+      while(str[i]==str[i+1]&&i<(len-1)) 
+        i++;
+    }
+    else t.push_back(str[i]);
+  }      
+   if(str[len-2]!=str[len-1]) //A点   判断最后一个字符 
+    t.push_back(str[len-1]);
+    return string(t.begin(),t.end());
+}
+
+int main(){
+   string s;
+   string In="ABC";
+   int n,max,min,size;
+   cin>>n;
+   while(n--){
+     cin>>s;
+     max=s.size();
+     min=s.size();
+     for(int i=0;i<s.size();i++){
+       for(int j=0;j<3;j++){
+         string s_i=s.substr(0,i+1)+In[j]+s.substr(i+1);  //插入组成新字符串 
+         size=s_i.size();
+         while(size>(s_i=Sub(s_i)).size()){   //循环至不能再消除 
+            size=s_i.size();            
+          }
+         if(min>s_i.size()) 
+             min=s_i.size();
+       }
+     }
+     cout<<max-min+1<<endl; 
+   }    
+   return 0; 
+} 
