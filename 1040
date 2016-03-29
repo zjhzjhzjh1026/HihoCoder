@@ -1,0 +1,69 @@
+/*********************************************************************************
+  *FileName:Rectangle judgment
+  *Author: Javan
+  *Version: 1.0
+  *Date:  2016.3.29
+  *Function: Input 4 lines, and judge whether they can make a rectangle precisely
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1040
+  *Explain：use container<set> to see if there are just 4 different points in 4 lines,
+   and judge if they are parallel or perpendicular.
+**********************************************************************************/
+#include<iostream>
+#include<set>
+using namespace std;
+
+struct Point{             //定义结构体Point，并重载运算符 
+    int x,y; 
+    bool operator <(const Point &p2) const   
+    {
+       if(x<p2.x||(x==p2.x&&y<p2.y))
+        return true;
+       return false;
+    }    
+    bool operator ==(const Point &p2) const
+    {
+       if(x==p2.x&&y==p2.y)
+        return true;
+       return false;
+    }
+}; 
+
+struct Line{   //结构 Line 
+  Point p1,p2; 
+}; 
+
+bool judgeRect(Line t[]){
+   set<Point> Q;   
+   for(int i=0;i<4;i++)
+   {
+     Q.insert(t[i].p1);
+     Q.insert(t[i].p2);
+   }
+   if(Q.size()!=4)    //放入后读不同的点数 
+     return false;
+   for(int i=1;i<4;i++)
+   {
+       if((t[0].p1.y-t[0].p2.y)*(t[i].p1.x-t[i].p2.x)==(t[i].p1.y-t[i].p2.y)*(t[0].p1.x-t[0].p2.x))  //平行
+       continue;
+       if((t[0].p1.y-t[0].p2.y)*(t[i].p1.y-t[i].p2.y)==-(t[0].p1.x-t[0].p2.x)*(t[i].p1.x-t[i].p2.x)) //垂直 
+       continue;
+       return false;
+   }  
+   return true; 
+}
+
+int main(){
+  int n;
+  cin>>n;
+  while(n--)
+  {
+     Line t[4];
+     for(int i=0;i<4;i++)  //input 
+     cin>>t[i].p1.x>>t[i].p1.y>>t[i].p2.x>>t[i].p2.y;
+     bool ans=judgeRect(t);   
+     if(ans) 
+      cout<<"YES"<<endl;
+     else cout<<"NO"<<endl;
+  }
+return 0;
+}
