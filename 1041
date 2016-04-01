@@ -1,0 +1,83 @@
+/*********************************************************************************
+  *FileName:DFS
+  *Author: Javan
+  *Version: 1.0
+  *Date:  2016.3.31
+  *Function: Deep first search.
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1041
+   Right result,but time limit exceeds
+**********************************************************************************/
+#include<iostream>
+#include<vector>
+#include<bitset>
+ 
+#define N 105                    //TLE????? 
+using namespace std;
+bitset<N> f[N];     //标记两点之间是否可以通过路走到 
+vector<int> road[N];
+bool access[N][N];//两点之间是否有一条路连接 
+bool flag;
+int req[N];
+int m;
+int u,coun;
+
+void dfs(int u,int parent){
+  f[u][u]=1;            //自己到自己肯定可以     
+  for(int i=0;i<(int)road[u].size();i++){
+    int v=road[u][i];  //v需要在此处定义！！！！不然每次dfs都会被覆盖掉，然后最后一步就不是之前的v了 
+    if(v==parent) 
+      continue;
+    dfs(v,u);
+    f[u] |= f[v];        
+  }
+}
+
+void solve(int u,int parent){   //
+    if(coun<m&&req[coun]==u) 
+      coun++;
+    if(coun==m){
+      flag=true;
+      return;
+    }
+    while(coun<m){ 
+     int next=req[coun];
+     int cursor=coun;
+    for(int i=0;i<(int)road[u].size();i++){
+      int v=road[u][i];
+      if(v==parent)
+       continue;
+      if(access[u][v]&&f[v][next]){   //u到v的路没被走过，且v到next可达 
+        access[u][v]=0;
+        solve(v,u);
+        break;
+      }        
+    }
+    if(cursor==coun) break;  //子树中没有后续节点 
+  }
+}
+
+int main(){ 
+    int T;
+    cin>>T;
+    while(T--){
+       int n;
+       cin>>n;
+       for(int i=1;i<n;i++){
+          int v;
+          cin>>u>>v;
+          road[u].push_back(v);
+          road[v].push_back(u);
+          access[u][v]=access[v][u]=1;       
+       }
+       cin>>m;
+       for(int i=0;i<m;i++)
+       cin>>req[i];
+       
+       dfs(1,-1);   //递归求出所有的f
+       coun=0;
+       flag=false;
+       solve(1,-1);
+       cout<<(flag?"YES":"NO")<<endl; 
+    }
+    return 0;
+}
