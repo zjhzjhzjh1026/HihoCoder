@@ -5,6 +5,7 @@
   *Date:  2016.4.4 (Tomb-sweeping Day, and new keyboard get~~~
   *Function: Enumeration Algorithm
   *Others:  SOURCE: http://hihocoder.com/problemset/problem/1042
+   Tips: the rectangles are m*n, not n*m as the subject says....
    Transfer the sludge area to the right-bottom direction firstly, then enumerate 
    every possible combination of length & width to get the maxmum area.
 **********************************************************************************/
