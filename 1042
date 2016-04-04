@@ -1,0 +1,59 @@
+/*********************************************************************************
+  *FileName:ride on a horse to enclose
+  *Author: Javan
+  *Version: 1.0
+  *Date:  2016.4.4 (Tomb-sweeping Day
+  *Function: Enumeration Algorithm
+  *Others:  SOURCE: http://hihocoder.com/problemset/problem/1042
+   Transfer the sludge area to the right-bottom direction firstly, then enumerate 
+   every possible combination of length & width to get the maxmum area.
+**********************************************************************************/
+#include<iostream>
+using namespace std;
+int l1,r1,t1,b1,n,m,L;;
+
+void trans_rt(int l,int r,int t,int b){  //由对称性将淤泥地矩形转换到右下角方向 
+  l1=l;
+  r1=r;
+  t1=t;
+  b1=b;
+  if(l+r<=m){
+    l1=m-r;
+    r1=m-l;
+  }        
+  if(t+b<=n){
+    t1=n-b;
+    b1=n-t;
+  } 
+}
+
+int main(){
+   cin>>n>>m>>L;
+   int l,r,t,b;
+   cin>>l>>r>>t>>b;
+   if(L>=(n+m)*2){      //如果L大于地的周长，则直接输出最大面积 
+     cout<<m*n-(r-l)*(b-t)<<endl;
+   //   system("Pause");
+     return 0;
+   }
+
+   trans_rt(l,r,t,b);
+
+    
+   int ans=0;
+   for(int i=1;i<L/2&&i<=m;i++)    //枚举法，，枚举长宽情况 
+     for(int j=1;j<=L/2-i&&j<=n;j++){
+       if(i<=l1||j<=t1)       //第一种情况，碰不到淤泥边界 
+         ans=(i*j>ans?i*j:ans);      
+       if(i>l1&&i<=r1&&j>t1&&j<=b1) //第二种情况，与淤泥相交，但不完全包含淤泥 
+         ans=(i*j-(i-l1)*(j-t1)>ans?i*j-(i-l1)*(j-t1):ans);
+       if(i>=r1&&j>=b1)    //第三种情况，完全包含淤泥区域 
+         ans=(i*j-(r1-l1)*(b1-t1)>ans?i*j-(r1-l1)*(b1-t1):ans);
+                           //至于一条边超过淤泥区域一条边在淤泥区域内的情况，，显然它不会是L一定时的最大面积情况 
+     }    
+     
+        
+   cout<<ans<<endl;
+ //system("Pause");
+ return 0;
+} 
