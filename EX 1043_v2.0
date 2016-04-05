@@ -1,0 +1,46 @@
+/*******************************************************************************
+  *FileName:Full Knapsack problem
+  *Author:  WILL
+  *Version: 2.0
+  *Date:  2016.4.5
+  *Function: dynamic planning to solve full Knapsack problem
+  *Others: SOURCE: http://hihocoder.com/problemset/problem/1043
+   better memory compression.
+**********************************************************************************/
+#include<iostream>
+#include<math.h>
+using namespace std;
+#define N 505
+#define M 10005
+
+int main(){                //v1.0会RE，，这个版本可以AC【337ms 1MB】	 
+  int n,m;
+  int best[2][M];     //可以将状态转移方程化简为只需要储存i状态和i-1状态即可 
+  //freopen("input.txt","r", stdin);
+ // freopen("out.txt","w",stdout); 
+  cin>>n>>m;
+  int need[N],value[N]; 
+  for(int i=1;i<=n;i++){           //输入数据 
+    cin>>need[i]>>value[i];
+  }   
+  for(int j=0;j<=m;j++){
+       best[0][j]=0;
+       best[1][j]=0;      
+          } 
+ int i;
+  for(i=1;i<=n;i++)
+   for(int j=0;j<=m;j++){
+      if(i%2==1){
+        if(j<need[i]) best[1][j]=best[0][j];
+         else best[1][j]=max(best[0][j],best[1][j-need[i]]+value[i]); //完全背包问题中，第二项修改为本项，意为再取一个 
+     }  
+      else{
+        if(j<need[i]) best[0][j]=best[1][j];
+         else best[0][j]=max(best[1][j],best[0][j-need[i]]+value[i]);
+     } 
+   } 
+
+   cout<<best[(i+1)%2][m]<<endl;
+  // fclose(stdin);
+  // fclose(stdout);
+} 
