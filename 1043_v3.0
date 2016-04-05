@@ -1,0 +1,39 @@
+/*******************************************************************************
+  *FileName:Full Knapsack problem
+  *Author:  WILL
+  *Version: 3.0
+  *Date:  2016.4.5
+  *Function: dynamic planning to solve full Knapsack problem
+  *Others: SOURCE: http://hihocoder.com/problemset/problem/1043
+   better better memory compression.
+**********************************************************************************/
+#include<iostream>
+#include<math.h>
+using namespace std;
+#define N 505
+#define M 100005
+
+int main(){                //再次优化【237ms 0MB】	 
+  int n,m;
+  int best[M];     
+  freopen("input.txt","r", stdin);
+  freopen("out.txt","w",stdout); 
+  cin>>n>>m;
+  int need[N],value[N]; 
+  for(int i=1;i<=n;i++){           //输入数据 
+    cin>>need[i]>>value[i];
+  }   
+  for(int j=0;j<=m;j++){
+       best[j]=0;     
+          } 
+ int i;
+  for(i=1;i<=n;i++)
+   for(int j=0;j<=m;j++){
+        if(j<need[i]) best[j]=best[j];
+         else best[j]=max(best[j],best[j-need[i]]+value[i]); //j正向遍历，后一项意为再取一个i，对比0-1背包问题(1038)的j逆向遍历 
+   } 
+
+   cout<<best[m]<<endl;
+   fclose(stdin);
+   fclose(stdout);
+} 
