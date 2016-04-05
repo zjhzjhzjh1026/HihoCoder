@@ -1,0 +1,38 @@
+/*******************************************************************************
+  *FileName:Full Knapsack problem
+  *Author:  WILL
+  *Version: 1.0
+  *Date:  2016.4.5
+  *Function: dynamic planning to solve full Knapsack problem
+  *Others: SOURCE: http://hihocoder.com/problemset/problem/1043
+**********************************************************************************/
+#include<iostream>  
+#include<math.h>
+using namespace std;
+#define N 50
+#define M 1005
+
+int main(){                 //最直观的方法，引入k个的概念遍历
+  int n,m;
+  int best[N][M];
+//  freopen("input.txt","r", stdin);
+ // freopen("out.txt","w",stdout); 
+  cin>>n>>m;
+  int need[N],value[N]; 
+  for(int i=1;i<=n;i++){           //输入数据 
+    cin>>need[i]>>value[i];
+  }   
+  for(int j=0;j<=m;j++) 
+    best[0][j]=0;
+  for(int i=1;i<=n;i++)
+   for(int j=0;j<=m;j++)
+   for(int k=0;k<=j/need[i];k++)   //k循环从0到k最大的个数 
+    {
+     if(j<need[i]) best[i][j]=best[i-1][j];
+     else best[i][j]=max(best[i-1][j],best[i-1][j-need[i]*k]+value[i]*k);   //新的引入k的状态转移方程~ 
+   } 
+
+   cout<<best[n][m]<<endl;
+  // fclose(stdin);
+   //fclose(stdout);
+} 
