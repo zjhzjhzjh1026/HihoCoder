@@ -6,16 +6,16 @@
   *Function: dynamic planning to solve full Knapsack problem
   *Others: SOURCE: http://hihocoder.com/problemset/problem/1043
 **********************************************************************************/
-#include<iostream>  
+#include<iostream>
 #include<math.h>
 using namespace std;
-#define N 50
-#define M 1005
+#define N 505
+#define M 100005
 
-int main(){                 //最直观的方法，引入k个的概念遍历
+int main(){                 // 自己测试结果okay，提交RE，，最笨的办法估计内存压缩不够？ 
   int n,m;
   int best[N][M];
-//  freopen("input.txt","r", stdin);
+ // freopen("input.txt","r", stdin);
  // freopen("out.txt","w",stdout); 
   cin>>n>>m;
   int need[N],value[N]; 
@@ -33,6 +33,6 @@ int main(){                 //最直观的方法，引入k个的概念遍历
    } 
 
    cout<<best[n][m]<<endl;
-  // fclose(stdin);
-   //fclose(stdout);
+   // fclose(stdin);
+   // fclose(stdout);
 } 
