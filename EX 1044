@@ -1,0 +1,68 @@
+/*******************************************************************************
+  *FileName:State Compression
+  *Author:  WILL
+  *Version: 1.0
+  *Date:  2016.4.12
+  *Function: State Compression Problem I
+  *Others: SOURCE: http://hihocoder.com/problemset/problem/1044
+**********************************************************************************/
+#include<iostream>
+#include<string.h>   //memset 
+#include<algorithm>  //max 
+
+using namespace std;
+
+const int MAX_M=10;
+const int MAX_N=1001;
+
+int dp[MAX_N][1<<MAX_M]; 
+int w[MAX_N];
+bool contr[1<<MAX_M];
+int N,M,Q;
+
+void init(){
+  memset(contr,false,sizeof(contr));
+  int value,count;
+  for(int i=1;i<(1<<M);i++){
+     count=0;
+     value=i;
+     while(value){
+       count+=value&1;    //一位一位地“数1”的个数 
+       value>>=1;
+     }
+     if(count<=Q)      //如果小于等于Q，则判定该数字可以满足Q要求 
+       contr[i]=true;
+  }     
+} 
+
+void solve(){
+ memset(dp,-1,sizeof(dp));
+ memset(dp[0],0,sizeof(dp[0]));
+ for(int i=1;i<=N;i++)
+   for(int j=0;j<(1<<M);j++)
+     if(dp[i-1][j]!=-1){   //前一个还没决断 
+      int j0=(j<<1)&((1<<M)-1);   //前面移位且插入0（不打扫此位），后面是将最高位置零
+      int j1=(j<<1|1)&((1<<M)-1); //插入1（此位打扫）
+     dp[i][j0]=max(dp[i][j0],dp[i-1][j]);     //状态转移方程1 
+     if(contr[j1])
+      dp[i][j1]=max(dp[i][j1],dp[i-1][j]+w[i]); //状态转移方程2 
+   }
+   int temp=0;
+   for(int i=0;i<(1<<M);i++){
+     temp=max(temp,dp[N][i]);
+   }
+   cout<<temp<<endl;
+}
+
+int main(){
+  //freopen("input.txt","r",stdin);
+ // freopen("output.txt","w",stdout);
+  cin>>N>>M>>Q;
+  for(int i=1;i<=N;i++)
+    cin>>w[i];  
+ // fclose(stdin);
+  init();   //初始化contr数组 
+  solve();
+  //fclose(stdout);
+ // system("pause");
+}
