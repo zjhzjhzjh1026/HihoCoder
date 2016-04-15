@@ -1,0 +1,33 @@
+/*******************************************************************************
+  *FileName:PostOrder Traversal
+  *Author:  WILL
+  *Version: 1.0
+  *Date:  2016.4.15
+  *Function: Use preorder and inorder traversal to get the postorder traversal.
+  *Others: SOURCE: http://hihocoder.com/problemset/problem/1049
+  Recursive Call to do this.
+**********************************************************************************/
+#include<iostream>
+#include<string.h>
+
+using namespace std;
+
+void printPostOrder(string preOrder,string inOrder,int len){  //递归调用输出后序遍历字串 
+  if(len<1) return;
+  char temp=preOrder[0];    //从先序读取根节点 
+  for(int i=0;i<len;i++){   //在中序中找寻根节点，，将字串分割成两部分递归调用 
+    if(inOrder[i]==temp){
+       printPostOrder(preOrder.substr(1),inOrder,i);    //这里substr没有设置结束位置，，因为有长度len控制结尾了 
+       printPostOrder(preOrder.substr(i+1),inOrder.substr(i+1),len-i-1);
+       cout<<temp;      //后序，，所以在最后输出 
+    }
+  }    
+}
+
+int main(){
+  string preOrder,inOrder;
+  cin>>preOrder>>inOrder;
+  int len=preOrder.length();
+  printPostOrder(preOrder,inOrder,len);    
+ // system("pause"); 
+} 
