@@ -36,11 +36,11 @@ int main()
           int id=0;
           for(k=1;k<str_resize.size();k++)              //Manacher算法！！！！！IMPORTANT！！！！ 
           {          
-            if(p[id]+id>k) p[k]=min(p[id*2-k],p[id]+id-k);
-            else p[k]=1;
+            if(p[id]+id>k) p[k]=min(p[id*2-k],p[id]+id-k);   //前半部分是一种镜像对称的感觉
+            else p[k]=1;             //后半部分是限制对称部分的长度未超过p[id]+id的限度
             while(str_resize[k+p[k]]==str_resize[k-p[k]]) p[k]++;
             if(k+p[k]>id+p[id]) id=k;
-            res=max(res,p[k]);
+            res=max(res,p[k]);     //这里很神奇的取一半就是去掉特殊符号后的回文数字长度了，，不用讨论？？？
           } 
           cout<<res-1<<endl;
         } 
